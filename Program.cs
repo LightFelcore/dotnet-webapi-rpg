@@ -1,3 +1,6 @@
+// Make the RpgClass globally accessible
+global using dotnet_webapi_rpg.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
