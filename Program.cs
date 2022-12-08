@@ -1,5 +1,6 @@
 // Make the RpgClass globally accessible
 global using dotnet_webapi_rpg.Models;
+using dotnet_webapi_rpg.Services.CharacterService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<ICharacterService, CharacterService>();
+    
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
