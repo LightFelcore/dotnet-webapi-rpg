@@ -1,6 +1,7 @@
 // Make the RpgClass globally accessible
 global using dotnet_webapi_rpg.Models;
 using dotnet_webapi_rpg.Data;
+using dotnet_webapi_rpg.Services.AuthRepository;
 using dotnet_webapi_rpg.Services.CharacterService;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
     
 var app = builder.Build();
 
