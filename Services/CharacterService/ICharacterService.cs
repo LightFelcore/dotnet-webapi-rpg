@@ -9,7 +9,7 @@ namespace dotnet_webapi_rpg.Services.CharacterService
     public interface ICharacterService
     {
         Task<ServiceResponse<List<GetCharacterDto>>> CreateCharacter(AddCharacterDto character);
-        Task<ServiceResponse<List<GetCharacterDto>>> GetCharacters();
+        Task<ServiceResponse<List<GetCharacterDto>>> GetCharacters(int userId);
         Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id);
         Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdatedCharacterDto updatedCharacter);
         Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id);

@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using dotnet_webapi_rpg.Models;
 using dotnet_webapi_rpg.Services.CharacterService;
 using dotnet_webapi_rpg.DTOs.Character;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace dotnet_webapi_rpg.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
@@ -20,9 +23,12 @@ namespace dotnet_webapi_rpg.Controllers
             _characterService = characterService;
         }
 
+        // [AllowAnonymous]  allows 'get characters' even if anonymous. All the other methods need autorization in header request
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetCharacters() {
-            return Ok(await _characterService.GetCharacters());
+            // Grab the user id in order to get all the characters for a specific user
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            return Ok(await _characterService.GetCharacters(userId));
         }
         
         [HttpGet("{id}")] // send id through the URL

@@ -50,10 +50,13 @@ namespace dotnet_webapi_rpg.Services.CharacterService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> GetCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDto>>> GetCharacters(int userId)
         {
             var response = new ServiceResponse<List<GetCharacterDto>>();
-            response.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
+            var dbCharacters = await _context.Characters
+                .Where(c => c.User.Id == userId) // characters for a specific user
+                .ToListAsync();
+            response.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
             return response;
         }
 
