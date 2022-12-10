@@ -1,5 +1,5 @@
 # dotnet-webapi-rpg
-Run the app by executing following command: `dotnet run`. This application is an RPG game written with .NET7.0
+Run the app by executing following command: `dotnet run`. This application is an RPG game written with .NET-7.0.
 
 ## Dotnet-EF
 `dotnet tool install --global dotnet-ef`
