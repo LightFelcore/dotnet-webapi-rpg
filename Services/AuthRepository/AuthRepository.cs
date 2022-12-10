@@ -19,7 +19,7 @@ namespace dotnet_webapi_rpg.Services.AuthRepository
         {
             var response = new ServiceResponse<string>();
 
-            // Find the correct user by username
+            // Find the correct user by username - returns either the user or null
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower().Equals(username.ToLower()));
 
             // Check if the user was found
@@ -67,7 +67,7 @@ namespace dotnet_webapi_rpg.Services.AuthRepository
 
         public async Task<bool> UserExists(string username)
         {
-            // Check if user already exists by username
+            // Check if user already exists by username - returns either true or false
             return await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower());
         }
 
