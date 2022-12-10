@@ -19,16 +19,21 @@ namespace dotnet_webapi_rpg.Services.AuthRepository
         {
             var response = new ServiceResponse<string>();
 
-            // Check if user exists in the database
+            // Find the correct user by username
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower().Equals(username.ToLower()));
+
+            // Check if the user was found
             if(user == null) {
                 response.Success = false;
                 response.Message = "User not found";
             } 
+            // Verify if the user entred a correct password
             else if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)) {
                 response.Success = false;
                 response.Message = "Wrong password";
-            } else {
+            } 
+            // User is authenticated
+            else {
                 response.Data = user.Id.ToString();
             }
             return response;
@@ -63,10 +68,7 @@ namespace dotnet_webapi_rpg.Services.AuthRepository
         public async Task<bool> UserExists(string username)
         {
             // Check if user already exists by username
-            if(await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower())) {
-                return true;
-            }
-            return false;
+            return await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower());
         }
 
         private void CreatePasswordHashAndSalt(String password, out byte[] passwordHash, out byte[] passwordSalt) {
@@ -81,8 +83,9 @@ namespace dotnet_webapi_rpg.Services.AuthRepository
         {
             // Instanciating the password hash alogoritm
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt)) {
+                // Hash the entred password
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                // Compare the generated hash with the hash inside the database, BYTE BY BYTE
+                // Compare the generated entred password hash with the hash inside the database, BYTE BY BYTE
                 return computeHash.SequenceEqual(passwordHash);
             }
         }
