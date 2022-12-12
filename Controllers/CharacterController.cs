@@ -26,9 +26,7 @@ namespace dotnet_webapi_rpg.Controllers
         // [AllowAnonymous]  allows 'get characters' even if anonymous. All the other methods need autorization in header request
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetCharacters() {
-            // Grab the user id in order to get all the characters for a specific user
-            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            return Ok(await _characterService.GetCharacters(userId));
+            return Ok(await _characterService.GetCharacters());
         }
         
         [HttpGet("{id}")] // send id through the URL
@@ -39,8 +37,8 @@ namespace dotnet_webapi_rpg.Controllers
         }
 
         [HttpPost] // send the json new character through the body
-        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> CreateCharacter(AddCharacterDto character) {
-            return Ok(await _characterService.CreateCharacter(character));
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacter(AddCharacterDto character) {
+            return Ok(await _characterService.AddCharacter(character));
         }
 
         [HttpPut]
@@ -53,6 +51,13 @@ namespace dotnet_webapi_rpg.Controllers
         [HttpDelete]
         public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> DeleteCharacter(int id) {
             var response = await _characterService.DeleteCharacter(id);
+            if(response.Data == null) return NotFound(response);
+            return Ok(response);
+        }
+
+        [HttpPost("Skill")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill(AddCharacterSkillDto newCharacterSkill) {
+            var response = await _characterService.AddCharacterSkill(newCharacterSkill);
             if(response.Data == null) return NotFound(response);
             return Ok(response);
         }

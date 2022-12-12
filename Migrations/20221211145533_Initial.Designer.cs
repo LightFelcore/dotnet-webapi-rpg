@@ -12,8 +12,8 @@ using dotnet_webapi_rpg.Data;
 namespace dotnetwebapirpg.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221210142202_initial")]
-    partial class initial
+    [Migration("20221211145533_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,32 @@ namespace dotnetwebapirpg.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Weapon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.ToTable("Weapons");
+                });
+
             modelBuilder.Entity("dotnet_webapi_rpg.Models.Character", b =>
                 {
                     b.HasOne("dotnet_webapi_rpg.Models.User", "User")
@@ -94,6 +120,22 @@ namespace dotnetwebapirpg.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Weapon", b =>
+                {
+                    b.HasOne("dotnet_webapi_rpg.Models.Character", "Character")
+                        .WithOne("Weapon")
+                        .HasForeignKey("dotnet_webapi_rpg.Models.Weapon", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Character", b =>
+                {
+                    b.Navigation("Weapon");
                 });
 
             modelBuilder.Entity("dotnet_webapi_rpg.Models.User", b =>

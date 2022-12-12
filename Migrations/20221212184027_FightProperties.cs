@@ -5,43 +5,46 @@
 namespace dotnetwebapirpg.Migrations
 {
     /// <inheritdoc />
-    public partial class UserCharacterRelationship : Migration
+    public partial class FightProperties : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "UserId",
+                name: "Defeats",
                 table: "Characters",
                 type: "int",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Characters_UserId",
+            migrationBuilder.AddColumn<int>(
+                name: "Fights",
                 table: "Characters",
-                column: "UserId");
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Characters_Users_UserId",
+            migrationBuilder.AddColumn<int>(
+                name: "Victories",
                 table: "Characters",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "Id");
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Characters_Users_UserId",
-                table: "Characters");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Characters_UserId",
+            migrationBuilder.DropColumn(
+                name: "Defeats",
                 table: "Characters");
 
             migrationBuilder.DropColumn(
-                name: "UserId",
+                name: "Fights",
+                table: "Characters");
+
+            migrationBuilder.DropColumn(
+                name: "Victories",
                 table: "Characters");
         }
     }

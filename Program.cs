@@ -3,6 +3,8 @@ global using dotnet_webapi_rpg.Models;
 using dotnet_webapi_rpg.Data;
 using dotnet_webapi_rpg.Services.AuthRepository;
 using dotnet_webapi_rpg.Services.CharacterService;
+using dotnet_webapi_rpg.Services.FightService;
+using dotnet_webapi_rpg.Services.WeaponService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -29,8 +31,12 @@ builder.Services.AddSwaggerGen(configuration => {
     configuration.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IWeaponService, WeaponService>();
+builder.Services.AddScoped<IFightService, FightService>();
+
 // Authentication Scheme ==> Download package command: dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -47,6 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     }
 );
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

@@ -5,7 +5,7 @@
 namespace dotnetwebapirpg.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class weaponmodelchangement1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

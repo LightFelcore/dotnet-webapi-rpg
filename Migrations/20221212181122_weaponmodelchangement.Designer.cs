@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dotnet_webapi_rpg.Data;
 
@@ -11,9 +12,11 @@ using dotnet_webapi_rpg.Data;
 namespace dotnetwebapirpg.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221212181122_weaponmodelchangement")]
+    partial class weaponmodelchangement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,13 +51,7 @@ namespace dotnetwebapirpg.Migrations
                     b.Property<int>("Class")
                         .HasColumnType("int");
 
-                    b.Property<int>("Defeats")
-                        .HasColumnType("int");
-
                     b.Property<int>("Defense")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Fights")
                         .HasColumnType("int");
 
                     b.Property<int>("HitPoints")
@@ -71,9 +68,6 @@ namespace dotnetwebapirpg.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Victories")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -201,7 +195,7 @@ namespace dotnetwebapirpg.Migrations
             modelBuilder.Entity("dotnet_webapi_rpg.Models.Weapon", b =>
                 {
                     b.HasOne("dotnet_webapi_rpg.Models.Character", "Character")
-                        .WithOne("Weapon")
+                        .WithOne("Weapons")
                         .HasForeignKey("dotnet_webapi_rpg.Models.Weapon", "CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -211,7 +205,7 @@ namespace dotnetwebapirpg.Migrations
 
             modelBuilder.Entity("dotnet_webapi_rpg.Models.Character", b =>
                 {
-                    b.Navigation("Weapon")
+                    b.Navigation("Weapons")
                         .IsRequired();
                 });
 

@@ -12,8 +12,8 @@ using dotnet_webapi_rpg.Data;
 namespace dotnetwebapirpg.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221209142040_UserCharacterRelationship")]
-    partial class UserCharacterRelationship
+    [Migration("20221211170618_skills")]
+    partial class skills
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace dotnetwebapirpg.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CharacterSkill", b =>
+                {
+                    b.Property<int>("CharactersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharactersId", "SkillsId");
+
+                    b.HasIndex("SkillsId");
+
+                    b.ToTable("CharacterSkill");
+                });
 
             modelBuilder.Entity("dotnet_webapi_rpg.Models.Character", b =>
                 {
@@ -62,6 +77,26 @@ namespace dotnetwebapirpg.Migrations
                     b.ToTable("Characters");
                 });
 
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Skill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skills");
+                });
+
             modelBuilder.Entity("dotnet_webapi_rpg.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -87,6 +122,47 @@ namespace dotnetwebapirpg.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Weapon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.ToTable("Weapons");
+                });
+
+            modelBuilder.Entity("CharacterSkill", b =>
+                {
+                    b.HasOne("dotnet_webapi_rpg.Models.Character", null)
+                        .WithMany()
+                        .HasForeignKey("CharactersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotnet_webapi_rpg.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("SkillsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("dotnet_webapi_rpg.Models.Character", b =>
                 {
                     b.HasOne("dotnet_webapi_rpg.Models.User", "User")
@@ -94,6 +170,23 @@ namespace dotnetwebapirpg.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Weapon", b =>
+                {
+                    b.HasOne("dotnet_webapi_rpg.Models.Character", "Character")
+                        .WithOne("Weapon")
+                        .HasForeignKey("dotnet_webapi_rpg.Models.Weapon", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("dotnet_webapi_rpg.Models.Character", b =>
+                {
+                    b.Navigation("Weapon")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("dotnet_webapi_rpg.Models.User", b =>
